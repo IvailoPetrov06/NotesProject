@@ -5,6 +5,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import StudentsList from './StudentsList';
+import StudentForm from './StudentForm';
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -12,6 +13,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='StudentsList'>
         <Stack.Screen name="StudentsList" component={StudentsList} options={{title: 'StudentsList'}}></Stack.Screen>
+        <Stack.Screen name="StudentForm" component={StudentForm} options={{title: 'StudentForm'}}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
