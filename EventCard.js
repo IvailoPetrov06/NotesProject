@@ -42,12 +42,6 @@ export default function EventCard({ eventItem }) {
         />
          </View>
       </View>
-      <View>if () {
-        
-      }
-      else
-      
-      </View>
       <View style={styles.mt10}>
         </View>
         <View style={styles.mt10}>
