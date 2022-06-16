@@ -87,24 +87,19 @@ export function deleteEvent(id) {
         .then(result => result.json())
         .catch(error => console.error(error));
 }
-export function addAbsence({ studentId, title, date, description }) {
-    fetch(`${BASE_URL}/${studentId}`,
+export function getAbsenceById({ id }) {
+    return fetch(ABSENCES_URL,
         {
-            method: 'PUT',
+            method: 'GET',
             headers: {
                 'content-type': 'application/json',
                 'x-apikey': API_KEY
             },
-            body: JSON.stringify({
-                $push: {
-                    absences: {
-                        id: [studentId, false]
-                    },
-                },
-            })
         })
         .then(result => result.json())
         .catch(error => console.error(error));
+}
+export function addAbsence({ studentId, title, date, description }) {
     return fetch(ABSENCES_URL,
         {
             method: 'POST',
@@ -119,10 +114,29 @@ export function addAbsence({ studentId, title, date, description }) {
             })
         })
         .then(result => result.json())
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .then(item => {
+            fetch(`${BASE_URL}/${studentId}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json',
+                        'x-apikey': API_KEY
+                    },
+                    body: JSON.stringify({
+                        $push: {
+                            absences: {
+                                [item._id]: [item._id, false]
+                            },
+                        },
+                    })
+                })
+                .then(result => result.json())
+                .catch(error => console.error(error));
+        });
 }
 export function changeAbsence({ studentId, id, excused }) {
-    
+
     fetch(`${BASE_URL}/${studentId}`,
         {
             method: 'PUT',
@@ -133,14 +147,14 @@ export function changeAbsence({ studentId, id, excused }) {
             body: JSON.stringify({
                 $push: {
                     absences: {
-                        [id]: [studentId, excused]
+                        [id]: [id, excused]
                     },
                 },
             })
         })
         .then(result => result.json())
         .catch(error => console.error(error));
-    
+
     return fetch(ABSENCES_URL,
         {
             method: 'PUT',

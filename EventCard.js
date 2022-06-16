@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Button, FlatList } from "react-native";
 import { formatDate, getCountdownParts } from "./util";
-import { deleteEvent, changeAbsence } from "./EventService";
+import { deleteEvent, getAbsenceById, changeAbsence } from "./EventService";
 import * as RootNavigation from "./RootNavigation";
 
 export default function EventCard({ eventItem }) {
   const countdown = getCountdownParts(eventItem.date);
+
+  function GetAbsences(){
+    let absences = [];
+    eventItem.absences.forEach(element => {
+      absences.push(element);
+    });
+    return absences;
+  }
 
   function RenderButton(excused, studentId, absenceId){
     if (excused) {
@@ -32,7 +40,7 @@ export default function EventCard({ eventItem }) {
           renderItem={({item}) => {
           <View>
             <Text>{item.title} - {item.description} - {item.date}</Text>
-            <Button title="Извинено" onPress={() => changeAbsence(eventItem._id, item.id, true)}></Button>
+            <Button title="Извинено" onPress={() => changeAbsence(eventItem._id, item[0], true)}></Button>
           </View>
          }}
         ></FlatList>
