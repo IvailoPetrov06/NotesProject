@@ -7,6 +7,14 @@ import * as RootNavigation from "./RootNavigation";
 export default function EventCard({ eventItem }) {
   const countdown = getCountdownParts(eventItem.date);
 
+  function RenderButton(excused, studentId, absenceId){
+    if (excused) {
+      return <Button title="Неизвинено" onPress={() => changeAbsence(studentId, absenceId, false)}></Button>
+    } else {
+      return <Button title="Извинено" onPress={() => changeAbsence(studentId, absenceId, false)}></Button>
+    }
+  }
+
   return (
     <View style={styles.eventCard}>
       <View style={styles.eventCardHeader}>
@@ -24,14 +32,7 @@ export default function EventCard({ eventItem }) {
           renderItem={({item}) => {
           <View>
             <Text>{item.title} - {item.description} - {item.date}</Text>
-            (if (item.excused) {
-              <Button title="Извинено" onPress={() => changeAbsence(eventItem._id, item.id, true)} ></Button>
-            }
-            else
-            {
-              <Button title="Незвинено" onPress={() => changeAbsence(eventItem._id, item.id, false)} ></Button>
-            }
-            )
+            {RenderButton(excused, eventItem._id, item.id)}
           </View>
          }}
         ></FlatList>

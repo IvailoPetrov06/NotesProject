@@ -97,7 +97,7 @@ export function addAbsence({id, title, date, description}) {
             },
             body: JSON.stringify({
                 absences: {
-                    absenceId: {
+                    [absenceId]: {
                         id: absenceId,
                         title: title,
                         description: description,
