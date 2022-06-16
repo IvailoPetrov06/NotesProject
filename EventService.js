@@ -2,7 +2,7 @@ import moment from 'moment';
 import uuid from 'uuid';
 
 const BASE_URL = 'https://notesproject-56e1.restdb.io/rest/notes';
-const BASE_URL = 'https://notesproject-56e1.restdb.io/rest/absence';
+const ABSENCE_URL = 'https://notesproject-56e1.restdb.io/rest/absence';
 const API_KEY = '62a4a6a21a51777906aff956';
 
 export function getEvents() {
@@ -88,7 +88,7 @@ export function deleteEvent(id) {
         .catch(error => console.error(error));
 }
 export function addAbsence({title, date, description1}) {
-    return fetch(`${BASE_URL!,
+    return fetch(`${BASE_URL}/${id}`,
         {
             method: 'POST',
             headers: {
@@ -96,7 +96,13 @@ export function addAbsence({title, date, description1}) {
                 'x-apikey': API_KEY
             },
             body: JSON.stringify({
-                title, date, description1, id: uuid()
+                absences: [
+                    {
+                        title: title,
+                        description: description1,
+                        date: date
+                    },
+                ],
             })
         })
         .then(result => result.json())

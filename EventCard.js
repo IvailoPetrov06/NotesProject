@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, FlatList } from "react-native";
 import { formatDate, getCountdownParts } from "./util";
 import { deleteEvent } from "./EventService";
 import * as RootNavigation from "./RootNavigation";
@@ -17,6 +17,12 @@ export default function EventCard({ eventItem }) {
       <View style={styles.counterContainer}>
         <View style={styles.counter}>
         </View>
+      </View>
+      <View>
+        <FlatList
+          data={eventItem.absences}
+          renderItem={({item}) => <Text>{item.title} - {item.description} - {item.date}</Text>}
+        ></FlatList>
       </View>
       <View style={styles.mt10}>
         <Button
@@ -41,7 +47,6 @@ export default function EventCard({ eventItem }) {
           title="Добави отсъствие"
         />
       </View>
-        />
         </View>
         <View style={styles.mt10}>
          <Button
