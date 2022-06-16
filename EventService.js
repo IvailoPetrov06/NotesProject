@@ -2,6 +2,7 @@ import moment from 'moment';
 import uuid from 'uuid';
 
 const BASE_URL = 'https://notesproject-56e1.restdb.io/rest/notes';
+const ABSENCES_URL = "https://notesproject-56e1.restdb.io/rest/absence";
 const API_KEY = '62a4a6a21a51777906aff956';
 
 export function getEvents() {
@@ -14,11 +15,11 @@ export function getEvents() {
             }
         }
     )
-    .then(response => response.json())
-    .then(events => events.map(item => ({
-        ...item,
-        date: moment(item.date, "DD/MM/YYYY HH:mm").toDate(),
-    })));
+        .then(response => response.json())
+        .then(events => events.map(item => ({
+            ...item,
+            date: moment(item.date, "DD/MM/YYYY HH:mm").toDate(),
+        })));
 }
 
 export function getEventById(id) {
@@ -31,18 +32,18 @@ export function getEventById(id) {
             }
         }
     )
-    .then(response => response.json())
-    .then(item => {
-        return {
-            ...item,
-            date: moment(item.date, "DD/MM/YYYY HH:mm").toDate()
-        }
-    })
-    .catch(error => console.error(error));    
+        .then(response => response.json())
+        .then(item => {
+            return {
+                ...item,
+                date: moment(item.date, "DD/MM/YYYY HH:mm").toDate()
+            }
+        })
+        .catch(error => console.error(error));
 }
 
 
-export function addEvent({title, date, description}) {
+export function addEvent({ title, date, description }) {
     return fetch(BASE_URL,
         {
             method: 'POST',
@@ -58,7 +59,7 @@ export function addEvent({title, date, description}) {
         .catch(error => console.error(error));
 }
 
-export function editEvent({id, title, date, description}) {
+export function editEvent({ id, title, date, description }) {
     return fetch(`${BASE_URL}/${id}`,
         {
             method: 'PUT',
@@ -86,9 +87,8 @@ export function deleteEvent(id) {
         .then(result => result.json())
         .catch(error => console.error(error));
 }
-export function addAbsence({id, title, date, description}) {
-    const absenceId = uuid();
-    return fetch(`${BASE_URL}/${id}`,
+export function addAbsence({ studentId, title, date, description }) {
+    fetch(`${BASE_URL}/${studentId}`,
         {
             method: 'PUT',
             headers: {
@@ -96,22 +96,34 @@ export function addAbsence({id, title, date, description}) {
                 'x-apikey': API_KEY
             },
             body: JSON.stringify({
-                absences: {
-                    [absenceId]: {
-                        id: absenceId,
-                        title: title,
-                        description: description,
-                        date: date,
-                        excused: false,
+                $push: {
+                    absences: {
+                        id: [studentId, false]
                     },
                 },
             })
         })
         .then(result => result.json())
-        .catch(error => console.error(error)); 
+        .catch(error => console.error(error));
+    return fetch(ABSENCES_URL,
+        {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'x-apikey': API_KEY
+            },
+            body: JSON.stringify({
+                title: title,
+                date: date,
+                description: description
+            })
+        })
+        .then(result => result.json())
+        .catch(error => console.error(error));
 }
-export function changeAbsence({studentId, id, excused}) {
-    return fetch(`${BASE_URL}/${id}`,
+export function changeAbsence({ studentId, id, excused }) {
+    
+    fetch(`${BASE_URL}/${studentId}`,
         {
             method: 'PUT',
             headers: {
@@ -119,11 +131,26 @@ export function changeAbsence({studentId, id, excused}) {
                 'x-apikey': API_KEY
             },
             body: JSON.stringify({
-                absences: {
-                    id: {
-                        excused: excused,
+                $push: {
+                    absences: {
+                        [id]: [studentId, excused]
                     },
                 },
+            })
+        })
+        .then(result => result.json())
+        .catch(error => console.error(error));
+    
+    return fetch(ABSENCES_URL,
+        {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json',
+                'x-apikey': API_KEY
+            },
+            body: JSON.stringify({
+                student: studentId,
+                excused: excused
             })
         })
         .then(result => result.json())

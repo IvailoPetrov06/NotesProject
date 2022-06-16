@@ -32,7 +32,7 @@ export default function EventCard({ eventItem }) {
           renderItem={({item}) => {
           <View>
             <Text>{item.title} - {item.description} - {item.date}</Text>
-            {RenderButton(excused, eventItem._id, item.id)}
+            <Button title="Извинено" onPress={() => changeAbsence(eventItem._id, item.id, true)}></Button>
           </View>
          }}
         ></FlatList>
