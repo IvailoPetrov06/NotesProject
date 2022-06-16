@@ -90,7 +90,7 @@ export function deleteEvent(id) {
 export function addAbsence({id, title, date, description}) {
     return fetch(`${BASE_URL}/${id}`,
         {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json',
                 'x-apikey': API_KEY
@@ -100,7 +100,8 @@ export function addAbsence({id, title, date, description}) {
                     {
                         title: title,
                         description: description,
-                        date: date
+                        date: date,
+                        excused: false,
                     },
                 ],
             })
