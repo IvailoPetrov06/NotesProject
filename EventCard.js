@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Button, FlatList } from "react-native";
 import { formatDate, getCountdownParts } from "./util";
-import { deleteEvent } from "./EventService";
+import { deleteEvent, changeAbsence } from "./EventService";
 import * as RootNavigation from "./RootNavigation";
 
 export default function EventCard({ eventItem }) {
@@ -19,9 +19,21 @@ export default function EventCard({ eventItem }) {
         </View>
       </View>
       <View>
-        <FlatList
+        <FlatList style={styles.description}
           data={eventItem.absences}
-          renderItem={({item}) => {if (item.excused === true) {<Text>{item.title} - {item.description} - {item.date}</Text>}}}
+          renderItem={({item}) => {
+          <View>
+            <Text>{item.title} - {item.description} - {item.date}</Text>
+            (if (item.excused) {
+              <Button title="Извинено" onPress={() => changeAbsence(eventItem._id, item.id, true)} ></Button>
+            }
+            else
+            {
+              <Button title="Незвинено" onPress={() => changeAbsence(eventItem._id, item.id, false)} ></Button>
+            }
+            )
+          </View>
+         }}
         ></FlatList>
       </View>
       <View style={styles.mt10}>
