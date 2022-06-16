@@ -88,7 +88,7 @@ export function deleteEvent(id) {
         .catch(error => console.error(error));
 }
 export function addAbsence({title, date, description1}) {
-    return fetch(`${BASE_URL!,
+    return fetch(`BASE_URL1,
         {
             method: 'POST',
             headers: {
