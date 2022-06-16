@@ -21,7 +21,7 @@ export default function EventCard({ eventItem }) {
       <View>
         <FlatList
           data={eventItem.absences}
-          renderItem={({item}) => {if (item.excused) (<Text>{item.title} - {item.description} - {item.date}</Text>)}}
+          renderItem={({item}) => {if (item.excused === true) {<Text>{item.title} - {item.description} - {item.date}</Text>}}}
         ></FlatList>
       </View>
       <View style={styles.mt10}>
