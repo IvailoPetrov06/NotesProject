@@ -87,7 +87,7 @@ export function deleteEvent(id) {
         .then(result => result.json())
         .catch(error => console.error(error));
 }
-export function addAbsence({title, date, description1}) {
+export function addAbsence({id, title, date, description}) {
     return fetch(`${BASE_URL}/${id}`,
         {
             method: 'POST',
@@ -99,7 +99,7 @@ export function addAbsence({title, date, description1}) {
                 absences: [
                     {
                         title: title,
-                        description: description1,
+                        description: description,
                         date: date
                     },
                 ],

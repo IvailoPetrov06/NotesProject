@@ -2,28 +2,20 @@ import React, { Component } from "react";
 import { View, Button, TextInput, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { formatDate } from "./util";
-import { Add, getEventById } from "./EventService";
+import { addAbsence, getEventById } from "./EventService";
 
 class StudentAbsence extends Component {
   state = {
     id: "",
     title: "",
     date: Date.now(),
-    description1: "",
-    showDatePicker1: false,
+    description: "",
+    showDatePicker: false,
   };
 
   componentDidMount() {
-    const eventId = this.props.route.params["id"];
-    getEventById(eventId)
-    .then(item => {
-        this.setState({
-            id: item._id,
-            title: item.title,
-            date: item.date,
-            description1: item.description1
-        })
-    })
+    const id = this.props.route.params["id"];
+    this.setState({id});
   }
 
   handleChangeTitle = (value) => {
@@ -31,7 +23,7 @@ class StudentAbsence extends Component {
   };
 
   handleChangeDescription = (value) => {
-    this.setState({ description1: value });
+    this.setState({ description: value });
   };
 
   handleDatePress = () => {
@@ -75,11 +67,11 @@ class StudentAbsence extends Component {
         <Button
           title="Добави"
           onPress={() => {
-            Add({
+            addAbsence({
               id: this.state.id,
               title: this.state.title,
               date: formatDate(this.state.date),
-              description1: this.state.description1,
+              description: this.state.description,
             }).then(() => this.props.navigation.goBack());
           }}
         />
