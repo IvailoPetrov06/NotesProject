@@ -40,28 +40,7 @@ export default function EventCard({ eventItem }) {
           }
           title="Добави отсъствие"
         />
-         </View>
       </View>
-      <View style={styles.mt10}>
-        </View>
-        <View style={styles.mt10}>
-        <Button color = "green"
-          onPress={() =>
-            RootNavigation.navigate("s", {
-              id: eventItem._id,
-            })
-          }
-          title="извенено"
-        />
-         </View>
-        <View style={styles.mt10}>
-        <Button color = "red"
-          onPress={() =>
-            RootNavigation.navigate("s", {
-              id: eventItem._id,
-            })
-          }
-          title="неизвенено"
         />
         </View>
         <View style={styles.mt10}>
@@ -128,10 +107,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "uppercase",
     color: "#fff",
-  },
-  mt10: {
-    marginTop: 10,
-    width: 500,
-    left: 700,
   },
 });
