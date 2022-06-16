@@ -2,7 +2,7 @@ import moment from 'moment';
 import uuid from 'uuid';
 
 const BASE_URL = 'https://notesproject-56e1.restdb.io/rest/notes';
-const BASE_URL = 'https://notesproject-56e1.restdb.io/rest/absence';
+const BASE_URL1 = 'https://notesproject-56e1.restdb.io/rest/absence';
 const API_KEY = '62a4a6a21a51777906aff956';
 
 export function getEvents() {
