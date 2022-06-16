@@ -96,15 +96,15 @@ export function addAbsence({id, title, date, description}) {
                 'x-apikey': API_KEY
             },
             body: JSON.stringify({
-                absences: [
-                    [absenceId] = {
+                absences: {
+                    absenceId: {
                         id: absenceId,
                         title: title,
                         description: description,
                         date: date,
                         excused: false,
                     },
-                ],
+                },
             })
         })
         .then(result => result.json())
@@ -119,11 +119,11 @@ export function changeAbsence({studentId, id, excused}) {
                 'x-apikey': API_KEY
             },
             body: JSON.stringify({
-                absences: [
-                    [id] = {
+                absences: {
+                    id: {
                         excused: excused,
                     },
-                ],
+                },
             })
         })
         .then(result => result.json())
