@@ -4,6 +4,10 @@ import { FlatList } from "react-native";
 import EventCard from "./EventCard";
 import moment from "moment";
 import { getEvents } from "./EventService";
+import { getCountdownParts } from "./util";
+import {NotificationManager} from 'react-notifications';
+
+let notifSeen = false;
 
 class EventList extends Component {
   state = {
@@ -26,6 +30,10 @@ class EventList extends Component {
   }
 
   render() {
+    this.state.events.forEach(element => {
+      Notification(element);
+    });
+
     return (
       <View style={styles.listView}>
         <FlatList
@@ -42,6 +50,30 @@ class EventList extends Component {
 }
 
 export default EventList;
+
+function Notification(studentItem){
+  let countdown = null;
+  let unexcusedAbsence = null;
+  let notExcused = false;
+  if (notifSeen === false) {
+    studentItem.absences.forEach(absence => {
+      if (!absence.excused) {
+        notExcused = true;
+        unexcusedAbsence = absence.date;
+        countdown = getCountdownParts(moment(unexcusedAbsence, "DD/MM/YYYY hh:mm").toString());
+        console.log(moment(absence.date, "DD/MM/YYYY hh:mm").toString());
+        console.log(countdown);
+      }
+    });
+    if (notExcused) {
+      if (countdown.days <= -3) {
+        notifSeen = true;
+        NotificationManager.info("Unexcused absences", `${studentItem.title} has one or more unexcused absences!`, 4000);
+        console.log(notifSeen);
+      }
+    }
+  }
+}
 
 const styles = StyleSheet.create({
   listView: {

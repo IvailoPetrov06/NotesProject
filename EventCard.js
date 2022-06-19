@@ -5,9 +5,7 @@ import { deleteEvent, getAbsenceById, changeAbsence } from "./EventService";
 import * as RootNavigation from "./RootNavigation";
 
 export default function EventCard({ eventItem }) {
-  const countdown = getCountdownParts(eventItem.date);
-
-  function RenderButton(studentId, title, date, description, excused){
+  function RenderButton(studentId, date, description, excused){
     if (excused) {
       return <Button title="Неизвинено" onPress={() => changeAbsence({
         studentId: studentId, 

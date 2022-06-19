@@ -8,6 +8,9 @@ import EventDeleted from './EventDeleted';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef, isReadyRef } from './RootNavigation';
+import {NotificationContainer} from 'react-notifications';
+
+import 'react-notifications/lib/notifications.css';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +36,7 @@ export default function App() {
       <Stack.Screen name='ThankYou' component={ThankYou} options={{title: 'Благодаря'}} />
       <Stack.Screen name='EventDeleted' component={EventDeleted} options={{title: 'Изтрий'}} />
       </Stack.Navigator>
+      <NotificationContainer />
     </NavigationContainer>
   );
 }
