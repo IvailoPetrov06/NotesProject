@@ -7,19 +7,21 @@ import * as RootNavigation from "./RootNavigation";
 export default function EventCard({ eventItem }) {
   const countdown = getCountdownParts(eventItem.date);
 
-  function GetAbsences(){
-    let absences = [];
-    eventItem.absences.forEach(element => {
-      absences.push(element);
-    });
-    return absences;
-  }
-
-  function RenderButton(excused, studentId, absenceId){
+  function RenderButton(studentId, title, date, description, excused){
     if (excused) {
-      return <Button title="Неизвинено" onPress={() => changeAbsence(studentId, absenceId, false)}></Button>
+      return <Button title="Неизвинено" onPress={() => changeAbsence({
+        studentId: studentId, 
+        date: date, 
+        description: description, 
+        excused: false
+      })}></Button>
     } else {
-      return <Button title="Извинено" onPress={() => changeAbsence(studentId, absenceId, false)}></Button>
+      return <Button title="Извинено" onPress={() => changeAbsence({
+        studentId: studentId,  
+        date: date, 
+        description: description, 
+        excused: true
+      })}></Button>
     }
   }
 
@@ -30,19 +32,15 @@ export default function EventCard({ eventItem }) {
         <Text style={styles.date}>{formatDate(eventItem.date)}</Text>
       </View>
       <Text style={styles.description}>{eventItem.description}</Text>
-      <View style={styles.counterContainer}>
-        <View style={styles.counter}>
-        </View>
-      </View>
       <View>
-        <FlatList style={styles.description}
+        <FlatList
           data={eventItem.absences}
-          renderItem={({item}) => {
-          <View>
-            <Text>{item.title} - {item.description} - {item.date}</Text>
-            <Button title="Извинено" onPress={() => changeAbsence(eventItem._id, item[0], true)}></Button>
+          renderItem={({item}) => 
+          <View style={styles.absence}>
+            <Text style={styles.description}>{item.description} - {item.date}</Text>
+            {RenderButton(eventItem._id, item.date, item.description, item.excused)}
           </View>
-         }}
+         }
         ></FlatList>
       </View>
       <View style={styles.mt10}>
@@ -134,4 +132,11 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     color: "#fff",
   },
+  absence: {
+    marginBottom: 16,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
+  }
 });
