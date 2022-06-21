@@ -1,25 +1,16 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Button, FlatList } from "react-native";
 import { formatDate, getCountdownParts } from "./util";
-import { deleteEvent, getAbsenceById, changeAbsence } from "./EventService";
+import { deleteEvent, changeAbsence } from "./EventService";
+import { NotificationManager } from 'react-notifications';
 import * as RootNavigation from "./RootNavigation";
 
 export default function EventCard({ eventItem }) {
-  function RenderButton(studentId, date, description, excused){
+  function SuccessNotification(excused) {
     if (excused) {
-      return <Button title="Неизвинено" onPress={() => changeAbsence({
-        studentId: studentId, 
-        date: date, 
-        description: description, 
-        excused: false
-      })}></Button>
+      NotificationManager.success("Променен статус на извинено отсъствие", "Променен статус", 4000);
     } else {
-      return <Button title="Извинено" onPress={() => changeAbsence({
-        studentId: studentId,  
-        date: date, 
-        description: description, 
-        excused: true
-      })}></Button>
+      NotificationManager.success("Променен статус на неизвинено отсъствие", "Променен статус", 4000);
     }
   }
 
@@ -33,12 +24,17 @@ export default function EventCard({ eventItem }) {
       <View>
         <FlatList
           data={eventItem.absences}
-          renderItem={({item}) => 
-          <View style={styles.absence}>
-            <Text style={styles.description}>{item.description} - {item.date}</Text>
-            {RenderButton(eventItem._id, item.date, item.description, item.excused)}
-          </View>
-         }
+          renderItem={({ item }) =>
+            <View style={styles.absence}>
+              <Text style={styles.description}>{item.description} - {item.date}</Text>
+              <Button title="Извинено/Неизвинено" onPress={() => changeAbsence({
+                studentId: eventItem._id,
+                date: item.date,
+                description: item.description,
+                excused: !item.excused
+              }).then(item.excused = !item.excused).then(SuccessNotification(item.excused))}></Button>
+            </View>
+          }
         ></FlatList>
       </View>
       <View style={styles.mt10}>
@@ -52,21 +48,21 @@ export default function EventCard({ eventItem }) {
         />
       </View>
       <View>
-      <View style={styles.mt10}>
+        <View style={styles.mt10}>
         </View>
         <View style={styles.mt10}>
-        <Button color = "grey"
-          onPress={() =>
-            RootNavigation.navigate("StudentAbsence", {
-              id: eventItem._id,
-            })
-          }
-          title="Добави отсъствие"
-        />
+          <Button color="grey"
+            onPress={() =>
+              RootNavigation.navigate("StudentAbsence", {
+                id: eventItem._id,
+              })
+            }
+            title="Добави отсъствие"
+          />
+        </View>
       </View>
-        </View>
-        <View style={styles.mt10}>
-         <Button
+      <View style={styles.mt10}>
+        <Button
           onPress={() => {
             deleteEvent(eventItem._id);
             RootNavigation.navigate("EventDeleted", {});
@@ -74,7 +70,7 @@ export default function EventCard({ eventItem }) {
           title="изтрий"
         />
       </View>
-      </View>
+    </View>
   );
 }
 
@@ -136,5 +132,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
+  },
+  absenceExcused: {
+    fontSize: 20,
+    marginTop: 16,
+    color: "green",
+  },
+  absenceNotExcused: {
+    fontSize: 20,
+    marginTop: 16,
+    color: "red",
   }
 });
